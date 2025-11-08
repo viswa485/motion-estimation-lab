@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<rect width="900" height="520" fill="#ffffff"/>
+<text x="450" y="34" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#172033">HEVC rate–distortion sample</text>
+<text x="450" y="61" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#526078">FFmpeg libx265 · medium preset · 2 s synthetic clip · PSNR vs. decoded H.264 input</text>
+<g stroke="#d9e0ea" stroke-width="1"><line x1="90" y1="400" x2="820" y2="400"/><line x1="90" y1="325" x2="820" y2="325"/><line x1="90" y1="250" x2="820" y2="250"/><line x1="90" y1="175" x2="820" y2="175"/><line x1="90" y1="100" x2="820" y2="100"/></g>
+<g stroke="#526078" stroke-width="1.5"><line x1="90" y1="100" x2="90" y2="400"/><line x1="90" y1="400" x2="820" y2="400"/></g>
+<g fill="#526078" font-family="Arial,sans-serif" font-size="12" text-anchor="end"><text x="78" y="404">30.5</text><text x="78" y="329">30.8</text><text x="78" y="254">31.1</text><text x="78" y="179">31.4</text><text x="78" y="104">31.7</text></g>
+<g fill="#526078" font-family="Arial,sans-serif" font-size="12" text-anchor="middle"><text x="90" y="423">10</text><text x="236" y="423">20</text><text x="382" y="423">30</text><text x="528" y="423">40</text><text x="674" y="423">50</text><text x="820" y="423">60</text></g>
+<text x="455" y="462" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#172033">Encoded bitrate (kb/s; container size / source duration)</text>
+<text transform="translate(25 250) rotate(-90)" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#172033">Decoded-video PSNR (dB)</text>
+<polyline points="235,349 344,210 477,141 611,114" fill="none" stroke="#2563eb" stroke-width="3"/>
+<circle cx="235" cy="349" r="7" fill="#2563eb"/><text x="247" y="367" font-family="Arial,sans-serif" font-size="13" fill="#172033">CRF 37</text>
+<circle cx="344" cy="210" r="7" fill="#2563eb"/><text x="355" y="228" font-family="Arial,sans-serif" font-size="13" fill="#172033">CRF 32</text>
+<circle cx="477" cy="141" r="7" fill="#2563eb"/><text x="489" y="160" font-family="Arial,sans-serif" font-size="13" fill="#172033">CRF 27</text>
+<circle cx="611" cy="114" r="7" fill="#2563eb"/><text x="623" y="102" font-family="Arial,sans-serif" font-size="13" fill="#172033">CRF 22</text>
+<text x="450" y="498" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#526078">Separate encoder measurement; it does not evaluate the custom C++ search inside libx265.</text>
+</svg>
