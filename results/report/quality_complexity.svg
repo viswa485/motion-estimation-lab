@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<rect width="900" height="520" fill="#ffffff"/>
+<text x="450" y="34" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#172033">Motion-search quality vs. candidate count</text>
+<text x="450" y="61" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#526078">Synthetic 192 × 128 frame pair · block 16 · search range 8</text>
+<g stroke="#d9e0ea" stroke-width="1"><line x1="90" y1="400" x2="820" y2="400"/><line x1="90" y1="335" x2="820" y2="335"/><line x1="90" y1="270" x2="820" y2="270"/><line x1="90" y1="205" x2="820" y2="205"/><line x1="90" y1="140" x2="820" y2="140"/><line x1="90" y1="75" x2="820" y2="75"/></g>
+<g stroke="#526078" stroke-width="1.5"><line x1="90" y1="75" x2="90" y2="400"/><line x1="90" y1="400" x2="820" y2="400"/></g>
+<g fill="#526078" font-family="Arial,sans-serif" font-size="12" text-anchor="end"><text x="78" y="404">20</text><text x="78" y="339">23</text><text x="78" y="274">26</text><text x="78" y="209">29</text><text x="78" y="144">32</text><text x="78" y="79">35</text></g>
+<g fill="#526078" font-family="Arial,sans-serif" font-size="12" text-anchor="middle"><text x="90" y="423">0</text><text x="236" y="423">50</text><text x="382" y="423">100</text><text x="528" y="423">150</text><text x="674" y="423">200</text><text x="820" y="423">250</text></g>
+<text x="455" y="462" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#172033">Unique candidate evaluations per block (lower is less search work)</text>
+<text transform="translate(25 242) rotate(-90)" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#172033">Motion-compensated PSNR (dB)</text>
+<circle cx="775" cy="137" r="7" fill="#64748b"/><text x="757" y="119" text-anchor="end" font-family="Arial,sans-serif" font-size="13" fill="#172033">Full search · 235</text>
+<circle cx="167" cy="298" r="7" fill="#d97706"/><text x="180" y="313" font-family="Arial,sans-serif" font-size="13" fill="#172033">Three-step · 26.25</text>
+<circle cx="156" cy="184" r="7" fill="#0d9488"/><text x="169" y="177" font-family="Arial,sans-serif" font-size="13" fill="#172033">Diamond · 22.55</text>
+<circle cx="131" cy="138" r="7" fill="#2563eb"/><text x="143" y="122" font-family="Arial,sans-serif" font-size="13" fill="#172033">Predictive diamond · 14.07</text>
+<text x="450" y="498" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#526078">Illustrative synthetic result only; not an end-to-end encoder performance claim.</text>
+</svg>

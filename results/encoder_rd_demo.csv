@@ -1,0 +1,5 @@
+input,encoder,preset,crf,duration_seconds,size_bytes,bitrate_kbps,decoded_video_psnr_db,encode_seconds,encode_repeats,encode_seconds_min,encode_seconds_max,encode_seconds_stddev,output_file
+demo_source.mp4,libx265,medium,22,2.0,12294,49.176,31.645205,0.13598787000000812,3,0.12610802200003945,0.1361349189999146,0.004692448820024729,encoder_runs/demo_source_libx265_crf22.mkv
+demo_source.mp4,libx265,medium,27,2.0,9104,36.416,31.536369,0.1328047650000599,3,0.13159282200001599,0.13991360300008182,0.003670297898853683,encoder_runs/demo_source_libx265_crf27.mkv
+demo_source.mp4,libx265,medium,32,2.0,6844,27.376,31.261964,0.11888611799997761,3,0.11717020999992656,0.12441876599996249,0.0030929327729525002,encoder_runs/demo_source_libx265_crf32.mkv
+demo_source.mp4,libx265,medium,37,2.0,4979,19.916,30.705267,0.1255551330000344,3,0.11751487100002578,0.13602087300000676,0.007576642739360254,encoder_runs/demo_source_libx265_crf37.mkv

@@ -63,7 +63,7 @@ Open `http://127.0.0.1:8000/docs` locally.
 
 On the included 192×128 synthetic test, with 16×16 blocks and a search range of 8 pixels, predictor-guided diamond search evaluated roughly 14 candidates per block versus 235 for exhaustive search. The observed speed/quality tradeoff is specific to this synthetic pair and machine. Do not interpret it as a general encoder-speedup result.
 
-See `results/benchmark.csv`, `results/report/quality_complexity.png`, and `results/encoder_rd_demo.png` for supplied example outputs. Re-run locally before making any hardware-dependent timing claims.
+See `results/benchmark.csv`, `results/benchmark_runs.csv`, `results/report/SUMMARY.md`, [the quality/complexity SVG](results/report/quality_complexity.svg), and [the HEVC rate–distortion SVG](results/encoder_rd_demo.svg) for supplied example outputs. Re-run locally before making any hardware-dependent timing claims.
 
 ## Repository map
 
@@ -71,7 +71,7 @@ See `results/benchmark.csv`, `results/report/quality_complexity.png`, and `resul
 cpp/                  C++ motion estimation core and unit tests
 python/codec_lab/     benchmark runner, reports, API, encoder matrix
 scripts/              reproducible demo commands
-data/demo/            small PGM test pair
+data/demo/            generated PGM test pair (created by the demo script)
 docs/                 experiment protocol, interview notes, roadmap
 results/              example CSVs, plots, and summary
 .github/workflows/    CI build and tests
