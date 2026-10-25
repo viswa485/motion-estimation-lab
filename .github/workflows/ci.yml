@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python package and test dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Configure C++ build
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Compile
+        run: cmake --build build --parallel
+      - name: C++ unit tests
+        run: ctest --test-dir build --output-on-failure
+      - name: Generate the deterministic demo pair
+        run: python -m codec_lab.data --output-dir data/demo
+      - name: Python pipeline tests
+        run: pytest -q
+      - name: Smoke-test benchmark and report
+        run: |
+          python -m codec_lab.runner --reference data/demo/reference.pgm --current data/demo/current.pgm --output results/ci_benchmark.csv --algorithm all --repeats 2
+          python -m codec_lab.report results/ci_benchmark.csv --output-dir results/ci_report
