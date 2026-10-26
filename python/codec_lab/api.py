@@ -1,7 +1,6 @@
 """Optional FastAPI service for running controlled local benchmark jobs."""
 from __future__ import annotations
 import csv
-import io
 import subprocess
 import tempfile
 from pathlib import Path
