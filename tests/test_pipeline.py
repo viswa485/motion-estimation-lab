@@ -21,6 +21,28 @@ def test_cli_outputs_all_algorithms(tmp_path: Path) -> None:
     assert all(float(row["avg_candidates_per_block"]) > 0 for row in rows)
     assert all(float(row["avg_sad_per_pixel"]) >= 0 for row in rows)
 
+@pytest.mark.skipif(not BINARY.exists(), reason="C++ benchmark must be built first")
+@pytest.mark.parametrize(
+    ("option", "value"),
+    [("--block-size", "16oops"), ("--search-range", "8junk")],
+)
+def test_cli_rejects_malformed_integer_options(option: str, value: str) -> None:
+    completed = subprocess.run(
+        [str(BINARY), "--reference", str(ROOT / "data/demo/reference.pgm"),
+         "--current", str(ROOT / "data/demo/current.pgm"), option, value],
+        check=False, cwd=ROOT, capture_output=True, text=True,
+    )
+    assert completed.returncode == 2
+    assert f"Invalid integer for {option}" in completed.stderr
+
+
+def test_demo_generator_rejects_non_positive_dimensions() -> None:
+    from codec_lab.data import make_reference
+
+    with pytest.raises(ValueError, match="width and height must be positive"):
+        make_reference(width=0, height=16)
+
+
 def test_demo_generator_is_reproducible(tmp_path: Path) -> None:
     from codec_lab.data import generate_pair
     ref1, cur1 = generate_pair(tmp_path / "first")
@@ -45,6 +67,15 @@ def test_local_api_executes_benchmark_and_rejects_path_escape() -> None:
     assert escaped.status_code == 400
 
 @pytest.mark.skipif(not BINARY.exists(), reason="C++ benchmark must be built first")
+def test_python_runner_refuses_to_overwrite_an_input_frame() -> None:
+    from codec_lab.runner import run
+
+    reference = ROOT / "data/demo/reference.pgm"
+    current = ROOT / "data/demo/current.pgm"
+    with pytest.raises(ValueError, match="must not overwrite input frame files"):
+        run(reference, current, reference, repeats=1)
+
+
 def test_python_runner_writes_median_and_raw_runs(tmp_path: Path) -> None:
     from codec_lab.runner import run
     output = tmp_path / "summary.csv"

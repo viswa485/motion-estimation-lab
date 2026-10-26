@@ -33,10 +33,13 @@ def run(reference: Path, current: Path, output: Path, block_size: int = 16,
         repeats: int = 5) -> Path:
     if repeats < 1 or repeats > 50:
         raise ValueError("repeats must be between 1 and 50")
-    binary = ensure_binary(build=build)
     reference, current, output = reference.resolve(), current.resolve(), output.resolve()
+    raw_path = output.with_name(f"{output.stem}_runs.csv")
+    if output in {reference, current} or raw_path in {reference, current}:
+        raise ValueError("Output paths must not overwrite input frame files")
     if not reference.is_file() or not current.is_file():
         raise FileNotFoundError("Both reference and current PGM paths must exist")
+    binary = ensure_binary(build=build)
     output.parent.mkdir(parents=True, exist_ok=True)
     collected: list[dict[str, str]] = []
     with tempfile.TemporaryDirectory(prefix="me-lab-") as temporary_dir:
@@ -51,7 +54,6 @@ def run(reference: Path, current: Path, output: Path, block_size: int = 16,
                     collected.append({"run": str(repeat_index), **row})
             if completed.stderr.strip():
                 print(completed.stderr.strip())
-    raw_path = output.with_name(f"{output.stem}_runs.csv")
     with raw_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=["run", *RAW_FIELDS])
         writer.writeheader()

@@ -9,6 +9,8 @@ def _draw_rectangle(frame: np.ndarray, x0: int, y0: int, x1: int, y1: int, value
 
 def make_reference(width: int = 192, height: int = 128, seed: int = 20261025) -> np.ndarray:
     """Create a deterministic textured scene with edges and flat regions."""
+    if width <= 0 or height <= 0:
+        raise ValueError("width and height must be positive")
     rng = np.random.default_rng(seed)
     yy, xx = np.mgrid[0:height, 0:width]
     base = 68 + 0.45 * xx + 0.28 * yy + 18 * np.sin(xx / 9.0) + 10 * np.cos(yy / 7.0)
@@ -32,8 +34,8 @@ def translate_frame(reference: np.ndarray, dx: int = 3, dy: int = -2) -> np.ndar
 
 def write_pgm(path: Path, frame: np.ndarray) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    if frame.ndim != 2 or frame.dtype != np.uint8:
-        raise ValueError("Expected a 2D uint8 grayscale frame")
+    if frame.ndim != 2 or frame.dtype != np.uint8 or frame.shape[0] <= 0 or frame.shape[1] <= 0:
+        raise ValueError("Expected a non-empty 2D uint8 grayscale frame")
     height, width = frame.shape
     with path.open("wb") as handle:
         handle.write(f"P5\n{width} {height}\n255\n".encode("ascii"))

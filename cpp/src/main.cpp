@@ -21,6 +21,20 @@ struct Options {
     int search_range = 8;
 };
 
+int parse_integer_option(const std::string& value, const char* option) {
+    std::size_t consumed = 0;
+    int parsed = 0;
+    try {
+        parsed = std::stoi(value, &consumed);
+    } catch (const std::exception&) {
+        throw std::invalid_argument(std::string("Invalid integer for ") + option + ": " + value);
+    }
+    if (consumed != value.size()) {
+        throw std::invalid_argument(std::string("Invalid integer for ") + option + ": " + value);
+    }
+    return parsed;
+}
+
 void print_usage(const char* program) {
     std::cerr << "Usage: " << program << " --reference REF.pgm --current CUR.pgm [options]\n"
               << "Options:\n"
@@ -41,8 +55,8 @@ Options parse_args(int argc, char** argv) {
         if (arg == "--reference") options.reference = require_value("--reference");
         else if (arg == "--current") options.current = require_value("--current");
         else if (arg == "--algorithm") options.algorithms = require_value("--algorithm");
-        else if (arg == "--block-size") options.block_size = std::stoi(require_value("--block-size"));
-        else if (arg == "--search-range") options.search_range = std::stoi(require_value("--search-range"));
+        else if (arg == "--block-size") options.block_size = parse_integer_option(require_value("--block-size"), "--block-size");
+        else if (arg == "--search-range") options.search_range = parse_integer_option(require_value("--search-range"), "--search-range");
         else if (arg == "--output") options.output = require_value("--output");
         else if (arg == "--help" || arg == "-h") {
             print_usage(argv[0]);
