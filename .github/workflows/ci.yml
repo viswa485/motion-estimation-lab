@@ -12,10 +12,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install FFmpeg for video integration tests
+      - name: Ensure FFmpeg is available for video integration tests
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes ffmpeg
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --yes ffmpeg
+          fi
           ffmpeg -hide_banner -encoders 2>&1 | grep -q libx264
       - name: Install Python package and test dependencies
         run: python -m pip install -e ".[dev]"
