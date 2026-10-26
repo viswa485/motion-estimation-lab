@@ -11,3 +11,6 @@ results/encoder_runs/
 results/encoder_rd.csv
 results/encoder_rd_curve.png
 data/demo_video_frames/
+data/demo/
+data/demo_source.mp4
+results/encoder_rd_demo.png

@@ -14,8 +14,8 @@ def create_report(csv_path: Path, output_dir: Path) -> tuple[Path, Path, Path]:
     if missing:
         raise ValueError(f"CSV is missing required columns: {sorted(missing)}")
     output_dir.mkdir(parents=True, exist_ok=True)
-    candidate_plot = output_dir / "candidate_evaluations.png"
-    quality_plot = output_dir / "quality_complexity.png"
+    candidate_plot = output_dir / "candidate_evaluations.svg"
+    quality_plot = output_dir / "quality_complexity.svg"
     summary_path = output_dir / "SUMMARY.md"
     fig, ax = plt.subplots(figsize=(8.5, 4.8))
     ax.bar(data["algorithm"], data["avg_candidates_per_block"])

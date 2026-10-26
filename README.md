@@ -23,7 +23,7 @@ Requirements: Python 3.10+, a C++17 compiler, CMake, and pip.
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --no-build-isolation -e ".[dev]"
+python -m pip install -e ".[dev]"
 ./scripts/run_demo.sh
 pytest -q
 ```
@@ -63,7 +63,7 @@ Open `http://127.0.0.1:8000/docs` locally.
 
 On the included 192×128 synthetic test, with 16×16 blocks and a search range of 8 pixels, predictor-guided diamond search evaluated roughly 14 candidates per block versus 235 for exhaustive search. The observed speed/quality tradeoff is specific to this synthetic pair and machine. Do not interpret it as a general encoder-speedup result.
 
-See `results/benchmark.csv`, `results/benchmark_runs.csv`, `results/report/SUMMARY.md`, [the quality/complexity SVG](results/report/quality_complexity.svg), and [the HEVC rate–distortion SVG](results/encoder_rd_demo.svg) for supplied example outputs. Re-run locally before making any hardware-dependent timing claims.
+See `results/benchmark.csv`, `results/benchmark_runs.csv`, `results/report/SUMMARY.md`, [the quality/complexity SVG](results/report/quality_complexity.svg), and [the example encoded-video rate–distortion SVG](results/encoder_rd_demo.svg) for supplied example outputs. Re-run locally before making any hardware-dependent timing claims.
 
 ## Repository map
 
