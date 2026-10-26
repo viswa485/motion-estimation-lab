@@ -56,12 +56,33 @@ def test_python_runner_writes_median_and_raw_runs(tmp_path: Path) -> None:
     assert rows[0]["algorithm"] == "predictive_diamond" and rows[0]["repeats"] == "2"
     assert (tmp_path / "summary_runs.csv").is_file()
 
-def _ffmpeg_has_libx265() -> bool:
+def _ffmpeg_has_encoder(encoder: str) -> bool:
     ffmpeg = shutil.which("ffmpeg")
     if ffmpeg is None:
         return False
     result = subprocess.run([ffmpeg, "-hide_banner", "-encoders"], capture_output=True, text=True)
-    return result.returncode == 0 and "libx265" in (result.stdout + result.stderr)
+    if result.returncode != 0:
+        return False
+    return any(
+        len(fields := line.split()) >= 2 and fields[1] == encoder
+        for line in result.stdout.splitlines()
+    )
+
+
+def _ffmpeg_has_libx265() -> bool:
+    return _ffmpeg_has_encoder("libx265")
+
+
+@pytest.mark.skipif(not _ffmpeg_has_encoder("libx264"), reason="FFmpeg libx264 encoder is unavailable")
+def test_demo_video_generator_creates_expected_clip(tmp_path: Path) -> None:
+    from codec_lab.demo_video import generate_video
+
+    video = generate_video(tmp_path / "demo_source.mp4", tmp_path / "frames")
+    assert video.is_file() and video.stat().st_size > 0
+    frames = sorted((tmp_path / "frames").glob("frame_*.pgm"))
+    assert len(frames) == 32
+    assert frames[0].read_bytes().startswith(b"P5")
+
 
 @pytest.mark.skipif(not _ffmpeg_has_libx265(), reason="Optional FFmpeg libx265 encoder is unavailable")
 def test_optional_encoder_matrix_records_rate_distortion(tmp_path: Path) -> None:

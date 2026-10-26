@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import io
 import subprocess
+import tempfile
 from pathlib import Path
 from typing import Literal
 from fastapi import FastAPI, HTTPException
@@ -39,15 +40,34 @@ def run_benchmark(request: BenchmarkRequest) -> dict[str, object]:
         raise HTTPException(status_code=503, detail="Build the C++ benchmark first: cmake -S . -B build && cmake --build build")
     reference = _safe_project_file(request.reference)
     current = _safe_project_file(request.current)
-    command = [str(BINARY), "--reference", str(reference), "--current", str(current),
-               "--block-size", str(request.block_size), "--search-range", str(request.search_range),
-               "--algorithm", request.algorithm, "--output", str(ROOT / "results/api_benchmark.csv")]
-    try:
-        completed = subprocess.run(command, cwd=ROOT, check=True, capture_output=True, text=True, timeout=120)
-    except subprocess.TimeoutExpired as exc:
-        raise HTTPException(status_code=408, detail="Benchmark exceeded the 120-second request limit") from exc
-    except subprocess.CalledProcessError as exc:
-        raise HTTPException(status_code=422, detail=exc.stderr.strip() or "Benchmark failed") from exc
-    csv_text = (ROOT / "results/api_benchmark.csv").read_text(encoding="utf-8")
-    rows = list(csv.DictReader(io.StringIO(csv_text)))
-    return {"rows": rows, "stdout": completed.stdout.strip(), "scope_note": "Motion-compensation PSNR is not encoded-video PSNR or BD-rate."}
+
+    # Use a per-request output file so concurrent requests cannot overwrite or
+    # read each other's benchmark results. Temporary outputs are removed on exit.
+    results_dir = ROOT / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="api-benchmark-", dir=results_dir) as temp_dir:
+        output_path = Path(temp_dir) / "benchmark.csv"
+        command = [str(BINARY), "--reference", str(reference), "--current", str(current),
+                   "--block-size", str(request.block_size), "--search-range", str(request.search_range),
+                   "--algorithm", request.algorithm, "--output", str(output_path)]
+        try:
+            completed = subprocess.run(
+                command,
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise HTTPException(status_code=408, detail="Benchmark exceeded the 120-second request limit") from exc
+        except subprocess.CalledProcessError as exc:
+            raise HTTPException(status_code=422, detail=exc.stderr.strip() or "Benchmark failed") from exc
+
+        with output_path.open(newline="", encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+        return {
+            "rows": rows,
+            "stdout": completed.stdout.strip(),
+            "scope_note": "Motion-compensation PSNR is not encoded-video PSNR or BD-rate.",
+        }

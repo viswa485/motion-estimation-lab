@@ -26,6 +26,8 @@ def measure_psnr(ffmpeg: str, encoded: Path, source: Path) -> float:
                              "-lavfi", "psnr", "-f", "null", "-"],
                             check=False, capture_output=True, text=True)
     output = result.stderr + "\n" + result.stdout
+    if result.returncode != 0:
+        raise RuntimeError("FFmpeg PSNR measurement failed.\n" + output[-2000:])
     matches = re.findall(r"average:([0-9]+(?:\.[0-9]+)?|inf)", output)
     if not matches:
         raise RuntimeError("Could not parse FFmpeg PSNR summary. Confirm source/output dimensions and frame rates.\n" + output[-2000:])
@@ -36,6 +38,25 @@ def run_matrix(input_video: Path, output_csv: Path, crfs: list[int], preset: str
     ffmpeg, ffprobe = shutil.which("ffmpeg"), shutil.which("ffprobe")
     if ffmpeg is None or ffprobe is None:
         raise RuntimeError("Both ffmpeg and ffprobe must be installed")
+
+    encoder_result = subprocess.run(
+        [ffmpeg, "-hide_banner", "-encoders"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if encoder_result.returncode != 0:
+        detail = encoder_result.stderr.strip() or encoder_result.stdout.strip()
+        raise RuntimeError(f"Could not query FFmpeg encoders: {detail}")
+    if not any(
+        len(fields := line.split()) >= 2 and fields[1] == encoder
+        for line in encoder_result.stdout.splitlines()
+    ):
+        raise RuntimeError(
+            f"FFmpeg encoder '{encoder}' is unavailable. Check the encoder name "
+            "and install an FFmpeg build that includes it."
+        )
+
     input_video = input_video.resolve()
     if not input_video.is_file():
         raise FileNotFoundError(f"Input video does not exist: {input_video}")

@@ -37,6 +37,11 @@ std::string next_pgm_token(std::istream& input) {
         }
         token.push_back(ch);
     }
+    // Treat CRLF as one header delimiter. For binary P5 data, leaving the LF
+    // after a CR would incorrectly consume it as the first pixel byte.
+    if (ch == '\r' && input.peek() == '\n') {
+        input.get();
+    }
     if (token.empty()) {
         throw std::runtime_error("Unexpected end of PGM header");
     }
@@ -248,9 +253,13 @@ Image load_pgm(const std::string& path) {
         if (input.gcount() != static_cast<std::streamsize>(count)) {
             throw std::runtime_error("PGM pixel data is truncated: " + path);
         }
-        if (max_value != 255) {
-            for (auto& pixel : image.pixels) {
-                pixel = static_cast<std::uint8_t>((static_cast<int>(pixel) * 255) / max_value);
+        for (auto& pixel : image.pixels) {
+            const int value = static_cast<int>(pixel);
+            if (value > max_value) {
+                throw std::runtime_error("PGM pixel exceeds max value");
+            }
+            if (max_value != 255) {
+                pixel = static_cast<std::uint8_t>((value * 255) / max_value);
             }
         }
     } else {

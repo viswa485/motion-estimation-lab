@@ -71,12 +71,44 @@ void test_mismatched_dimensions_fail() {
     catch (const std::invalid_argument&) { threw = true; }
     require(threw, "Mismatched frame dimensions should be rejected");
 }
+void test_binary_pgm_crlf_header() {
+    const auto path = std::filesystem::temp_directory_path() / "motion-estimation-lab-crlf-test.pgm";
+    {
+        std::ofstream out(path, std::ios::binary);
+        const char header[] = "P5\r\n2 1\r\n100\r\n";
+        const std::uint8_t pixels[] = {50U, 100U};
+        out.write(header, static_cast<std::streamsize>(sizeof(header) - 1));
+        out.write(reinterpret_cast<const char*>(pixels), static_cast<std::streamsize>(sizeof(pixels)));
+    }
+    const auto image = me::load_pgm(path.string());
+    require(image.width == 2 && image.height == 1, "Binary CRLF PGM dimensions parsed incorrectly");
+    require(image.at(0, 0) == 127U && image.at(1, 0) == 255U,
+            "Binary CRLF PGM pixel bytes or max-value scaling parsed incorrectly");
+    std::filesystem::remove(path);
+}
+void test_binary_pgm_rejects_pixel_above_max_value() {
+    const auto path = std::filesystem::temp_directory_path() / "motion-estimation-lab-maxval-test.pgm";
+    {
+        std::ofstream out(path, std::ios::binary);
+        const char header[] = "P5\n1 1\n100\n";
+        const std::uint8_t pixel = 101U;
+        out.write(header, static_cast<std::streamsize>(sizeof(header) - 1));
+        out.write(reinterpret_cast<const char*>(&pixel), 1);
+    }
+    bool threw = false;
+    try { (void)me::load_pgm(path.string()); }
+    catch (const std::runtime_error&) { threw = true; }
+    std::filesystem::remove(path);
+    require(threw, "Binary PGM pixel above the declared max value should be rejected");
+}
 }
 int main() {
     test_full_search_finds_translation();
     test_algorithms_return_valid_vectors();
     test_mismatched_dimensions_fail();
     test_ascii_pgm_accepts_zero_pixels();
+    test_binary_pgm_crlf_header();
+    test_binary_pgm_rejects_pixel_above_max_value();
     std::cout << "All motion-estimation unit tests passed.\n";
     return 0;
 }
