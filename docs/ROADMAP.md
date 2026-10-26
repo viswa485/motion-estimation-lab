@@ -1,15 +1,14 @@
-# Research roadmap
+# Roadmap
 
-## Follow-on milestones
+This roadmap describes possible extensions to the current standalone motion-estimation benchmark. Planned work is not part of the implemented feature set until it is reflected in the source code, tests, and results.
 
-| # | Suggested commit message | Acceptance criteria |
+| Area | Planned work | Completion criteria |
 |---|---|---|
-| 1 | feat: add multi-clip benchmark manifest | Run at least five diverse clips; preserve per-clip results and metadata |
-| 2 | feat: add block-size and search-range sweep | Automate a parameter matrix and summarize results |
-| 3 | feat: add motion and texture diagnostics | Record per-block motion magnitude, local texture, residual distribution, and failure cases |
-| 4 | feat: support raw YUV sequence inputs | Define pixel format, bit depth, and dimensions explicitly; test frame alignment |
-| 5 | feat: add external VVC encoder baseline adapter | Detect and run a local VVenC/VTM toolchain; record exact version/configuration and output logs |
-| 6 | feat: compare rate-distortion curves across configurations | Compare named encoder configurations over multiple quality points and sequences; document BD-rate method and validity range |
-| 7 | perf: optimize SAD kernels with equivalence tests | Add early termination or SIMD only behind correctness tests and benchmark the change |
-| 8 | research: integrate search experiment into a codec fork | Patch a specific codec version, build it, run encoding/decoding tests, and compare baseline versus modified encoder end-to-end |
-
+| Dataset coverage | Add a multi-clip benchmark manifest | Evaluate at least five diverse clips and retain per-clip results and metadata |
+| Parameter evaluation | Add block-size and search-range sweeps | Run a documented parameter matrix and summarize the results |
+| Motion diagnostics | Record motion magnitude, local texture, residual distributions, and failure cases | Produce per-block diagnostics and identify cases where fast search loses quality |
+| Input formats | Add raw YUV sequence support | Validate pixel format, bit depth, dimensions, and frame alignment |
+| VVC baselines | Add an adapter for an available VVenC or VTM toolchain | Record the exact encoder version, configuration, command, and output logs |
+| Rate–distortion analysis | Compare named encoder configurations across quality points and sequences | Document the calculation method, overlap range, and validity of any BD-rate result |
+| Search optimization | Evaluate early termination or SIMD SAD kernels | Preserve equivalence tests and include repeatable benchmarks |
+| Codec integration | Integrate a search strategy into a specific codec version | Build the modified codec, pass encoding/decoding tests, and compare it against a matched baseline |

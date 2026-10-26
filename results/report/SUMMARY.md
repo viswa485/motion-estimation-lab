@@ -13,9 +13,9 @@ Input: results/benchmark.csv
 | three_step | 26.2500 | 5.0098 | 24.7282 | 1.2377 |
 | full_search | 235.0000 | 1.8063 | 32.8714 | 10.2609 |
 
-## Interpretation checklist
+## Interpretation
 
-- Compare candidate evaluations before interpreting wall-clock time; runtime is sensitive to the machine and build.
-- Full search is the exact minimum-SAD baseline within the configured square window.
-- Fast searches can miss that minimum; quantify the quality/complexity trade-off across multiple clips and search ranges.
-- These measurements do not demonstrate encoder bitrate savings. Validate in a complete encoder before making that claim.
+- Candidate evaluations measure search work; elapsed time also depends on hardware and build settings.
+- Full search finds the minimum-SAD match within the configured legal displacement window.
+- Fast searches can miss that minimum; the quality/complexity trade-off requires evaluation across diverse clips and search ranges.
+- These measurements characterize local block matching, not changes in encoded bitrate or complete encoder runtime.

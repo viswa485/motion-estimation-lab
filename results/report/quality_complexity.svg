@@ -12,5 +12,5 @@
 <circle cx="167" cy="298" r="7" fill="#d97706"/><text x="180" y="313" font-family="Arial,sans-serif" font-size="13" fill="#172033">Three-step · 26.25</text>
 <circle cx="156" cy="184" r="7" fill="#0d9488"/><text x="169" y="177" font-family="Arial,sans-serif" font-size="13" fill="#172033">Diamond · 22.55</text>
 <circle cx="131" cy="138" r="7" fill="#2563eb"/><text x="143" y="122" font-family="Arial,sans-serif" font-size="13" fill="#172033">Predictive diamond · 14.07</text>
-<text x="450" y="498" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#526078">Illustrative synthetic result only; not an end-to-end encoder performance claim.</text>
+<text x="450" y="498" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#526078">Synthetic frame-pair benchmark; not a measurement of end-to-end encoder performance.</text>
 </svg>

@@ -159,9 +159,6 @@ void search_three_step(SearchContext& context) {
     while (step <= context.search_range / 2) {
         step *= 2;
     }
-    if (context.search_range > 0 && step < context.search_range) {
-        // The power-of-two schedule remains inside the configured search window.
-    }
     while (step >= 1) {
         const MotionVector center = context.best;
         for (int dy : {-step, 0, step}) {
@@ -347,7 +344,7 @@ std::vector<BlockMotion> estimate_motion(const Image& reference, const Image& cu
                 search_diamond(context, predictor);
             }
             if (context.best_sad == std::numeric_limits<std::uint64_t>::max()) {
-                // This can occur only for a degenerate boundary/search setup; keep the result deterministic.
+                // Fall back to the zero vector if no candidate was accepted.
                 context.evaluate(0, 0);
             }
             BlockMotion result;

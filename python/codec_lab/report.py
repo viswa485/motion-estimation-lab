@@ -47,11 +47,11 @@ def create_report(csv_path: Path, output_dir: Path) -> tuple[Path, Path, Path]:
         "on the supplied grayscale frame pair. PSNR is a motion-compensation proxy, **not encoded-video PSNR or BD-rate**.\n\n"
         f"Input CSV: {csv_path}\n\n"
         "## Results\n\n" + table +
-        "\n\n## Interpretation checklist\n\n"
-        "- Compare candidate evaluations before interpreting wall-clock time; runtime is sensitive to the machine and build.\n"
-        "- Full search is the exact minimum-SAD baseline within the configured square window.\n"
-        "- Fast searches can miss that minimum; quantify the quality/complexity trade-off across multiple clips and search ranges.\n"
-        "- These measurements do not demonstrate encoder bitrate savings. Validate in a complete encoder before making that claim.\n",
+        "\n\n## Interpretation\n\n"
+        "- Candidate evaluations measure search work; elapsed time also depends on hardware and build settings.\n"
+        "- Full search finds the minimum-SAD match within the configured legal displacement window.\n"
+        "- Fast searches can miss that minimum; the quality/complexity trade-off requires evaluation across diverse clips and search ranges.\n"
+        "- These measurements characterize local block matching, not changes in encoded bitrate or complete encoder runtime.\n",
         encoding="utf-8",
     )
     return candidate_plot, quality_plot, summary_path

@@ -1,10 +1,10 @@
 # Motion Estimation Lab
 
-**A reproducible C++ / Python research prototype for comparing block-matching motion-search algorithms.**
+**A reproducible C++17 and Python research prototype for evaluating block-matching motion-search algorithms.**
 
 The project isolates a performance-critical decision in inter-frame video coding: where should an encoder search in the reference frame for the best match to a current block? It compares exhaustive full search with three faster strategies, measuring candidate evaluations, residual error, motion-compensated PSNR, and wall-clock runtime.
 
-> **Research scope:** This repository implements a standalone motion-estimation experiment. It is not an HEVC/VVC-compliant encoder, and the search code is not yet patched into HM, VTM, or VVenC. Local SAD and motion-compensation metrics are not encoded bitrate, encoded-video PSNR, BD-rate, or a claim of end-to-end compression gain.
+> **Scope:** This repository implements standalone block matching, not a complete HEVC/VVC encoder. The C++ search has not been integrated into HM, VTM, VVenC, or libx265. Local SAD and motion-compensated PSNR measurements do not establish encoded bitrate, encoded-video PSNR, BD-rate, or end-to-end encoder speedup.
 
 ## Features
 
@@ -41,7 +41,7 @@ python -m codec_lab.runner --reference data/demo/reference.pgm --current data/de
 python -m codec_lab.report results/benchmark.csv --output-dir results/report
 ```
 
-### Optional real encoder experiment
+### Optional encoded-video rate–distortion experiment
 
 Install FFmpeg with `libx265` support, then run:
 
@@ -49,7 +49,7 @@ Install FFmpeg with `libx265` support, then run:
 ./scripts/run_encoder_matrix.sh
 ```
 
-The matrix measures an external encoder's rate-distortion behavior. It does **not** integrate the C++ motion search into libx265 or prove that the custom algorithm changes its performance. See `docs/EXPERIMENT_PROTOCOL.md` for metrics and methodology.
+The matrix measures an external encoder's rate–distortion behavior independently of the C++ search implementation. It does not measure the effect of the custom search algorithms on encoder performance. See `docs/EXPERIMENT_PROTOCOL.md` for metrics and methodology.
 
 ### Optional API
 
@@ -59,11 +59,11 @@ uvicorn codec_lab.api:app --app-dir python --host 127.0.0.1 --port 8000
 
 Open `http://127.0.0.1:8000/docs` locally.
 
-## Initial synthetic result
+## Example benchmark
 
-On the included 192×128 synthetic test, with 16×16 blocks and a search range of 8 pixels, predictor-guided diamond search evaluated roughly 14 candidates per block versus 235 for exhaustive search. The observed speed/quality tradeoff is specific to this synthetic pair and machine. Do not interpret it as a general encoder-speedup result.
+On the included 192×128 synthetic frame pair, using 16×16 blocks and a search range of 8 pixels, predictor-guided diamond search evaluated about 14 candidates per block, compared with 235 for exhaustive search. This result is specific to the input and configuration; it does not establish a general encoder-speedup result.
 
-See `results/benchmark.csv`, `results/benchmark_runs.csv`, `results/report/SUMMARY.md`, [the quality/complexity SVG](results/report/quality_complexity.svg), and [the example encoded-video rate–distortion SVG](results/encoder_rd_demo.svg) for supplied example outputs. Re-run locally before making any hardware-dependent timing claims.
+See `results/benchmark.csv`, `results/benchmark_runs.csv`, `results/report/SUMMARY.md`, [the quality/complexity plot](results/report/quality_complexity.svg), and [the encoded-video rate–distortion plot](results/encoder_rd_demo.svg) for example outputs. Absolute runtime comparisons should be reproduced on the target hardware.
 
 ## Repository map
 
@@ -79,11 +79,11 @@ results/              example CSVs, plots, and summary
 
 ## Limitations and research roadmap
 
-Next steps are multi-clip benchmarking, block-size/search-range sweeps, motion/texture diagnostics, raw YUV support, an external VTM/VVenC adapter, and eventual codec integration with baseline-versus-modified end-to-end measurements. See `docs/ROADMAP.md` for planned follow-up work.
+The roadmap covers multi-clip benchmarking, block-size and search-range sweeps, motion/texture diagnostics, raw YUV support, an external VTM/VVenC adapter, and codec-level evaluation. See `docs/ROADMAP.md` for details.
 
 ## Reproducibility notes
 
-Benchmark times depend on machine load, compiler, flags, and runtime environment. Preserve raw runs, report medians, and compare quality as well as complexity. For claims about real HEVC/VVC efficiency, record codec version/configuration and demonstrate a complete baseline-versus-modified encode/decode experiment.
+Benchmark times depend on machine load, compiler settings, and runtime environment. Raw runs and median measurements are retained to make runtime variability visible. Evaluating HEVC/VVC efficiency requires a complete baseline-versus-modified encode/decode experiment with the codec version, configuration, and measurement procedure documented.
 
 ## License
 
