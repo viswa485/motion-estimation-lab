@@ -72,14 +72,14 @@ cpp/                  C++ motion estimation core and unit tests
 python/codec_lab/     benchmark runner, reports, API, encoder matrix
 scripts/              reproducible demo commands
 data/demo/            generated PGM test pair (created by the demo script)
-docs/                 experiment protocol, interview notes, roadmap
+docs/                 experiment protocol and research roadmap
 results/              example CSVs, plots, and summary
 .github/workflows/    CI build and tests
 ```
 
 ## Limitations and research roadmap
 
-Next steps are multi-clip benchmarking, block-size/search-range sweeps, motion/texture diagnostics, raw YUV support, an external VTM/VVenC adapter, and eventual codec integration with baseline-versus-modified end-to-end measurements. See `docs/ROADMAP.md` and `docs/INTERVIEW_WALKTHROUGH.md`.
+Next steps are multi-clip benchmarking, block-size/search-range sweeps, motion/texture diagnostics, raw YUV support, an external VTM/VVenC adapter, and eventual codec integration with baseline-versus-modified end-to-end measurements. See `docs/ROADMAP.md` for planned follow-up work.
 
 ## Reproducibility notes
 
